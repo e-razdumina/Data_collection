@@ -36,12 +36,13 @@ class LeroyMerlinPhotosPipeline(ImagesPipeline):
 
 
 class LeroyMerlinCharacteristicsPipeline(object):
-    def characteristics_cleaner(self, item):
+    def process_item(self, item, spider):
+        characteristics = []
         for i in range(len(item['characteristics_term'])):
-            item['characteristics'] = {item['characteristics_term'][i]:item['characteristics_def'][i]}
-            return item
-
-
-
-
-
+            value = {}
+            value[item['characteristics_term'][i]] = item['characteristics_def'][i]
+            characteristics.append(value)
+        item['characteristics'] = characteristics
+        del (item['characteristics_term'])
+        del (item['characteristics_def'])
+        return item
