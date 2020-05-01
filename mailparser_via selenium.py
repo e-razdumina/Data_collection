@@ -5,10 +5,6 @@ from selenium.webdriver.support.ui import Select
 from pymongo import MongoClient
 import time
 
-chrome_options = Options()
-chrome_options.add_argument('start-maximized')
-
-
 driver = webdriver.Chrome('./chromedriver')
 
 driver.get('https://mail.ru')
@@ -48,7 +44,7 @@ while True:
 
     letters_count += 1
 
-    db.insert_one(letter)
+    db.mail.insert_one(letter)
 
     next_letter = driver.find_element_by_class_name('portal-menu-element_next')
     next_letter.click()
