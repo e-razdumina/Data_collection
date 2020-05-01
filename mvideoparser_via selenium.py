@@ -23,7 +23,7 @@ hits_count = 0
 
 time.sleep(5)
 
-for i in range(6):
+while True:
     products_section = driver.find_element_by_xpath(
         "//body[@class='home']/div[@class='wrapper']/div[@class='page-content']/div[@class='main-holder sel-main-holder']/div[10]/div[1]/div[2]/div[1]/div[1]")
     products = products_section.find_elements_by_xpath(".//a[contains(@class,'sel-product-tile-title')]")
@@ -38,6 +38,9 @@ for i in range(6):
         db.mvideo.insert_one(product_info)
 
     next_page = products_section.find_element_by_class_name("sel-hits-button-next")
+    if next_page.get_attribute('class') == "next-btn sel-hits-button-next disabled":
+        break
+
     actions = ActionChains(driver)
     actions.move_to_element(next_page).click().perform()
     time.sleep(3)
