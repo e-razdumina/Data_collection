@@ -42,6 +42,10 @@ while True:
     letter['topic'] = topic
     letter['content'] = content
 
+    letter_check = db.mail.find_one({'content': letter['content']})
+    if letter_check:
+        break
+
     letters_count += 1
 
     db.mail.insert_one(letter)
