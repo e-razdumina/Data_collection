@@ -9,6 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 from pymongo import MongoClient
 import json
+import pprint
 
 driver = webdriver.Chrome('./chromedriver')
 
@@ -22,22 +23,21 @@ hits_count = 0
 
 time.sleep(5)
 
-while True:
-    products_section = driver.find_element_by_xpath("//body[@class='home']/div[@class='wrapper']/div[@class='page-content']/div[@class='main-holder sel-main-holder']/div[10]/div[1]/div[2]/div[1]/div[1]")
+for i in range(5):
+    products_section = driver.find_element_by_xpath(
+        "//body[@class='home']/div[@class='wrapper']/div[@class='page-content']/div[@class='main-holder sel-main-holder']/div[10]/div[1]/div[2]/div[1]/div[1]")
     products = products_section.find_elements_by_xpath(".//a[contains(@class,'sel-product-tile-title')]")
 
     for product in products:
-            product_info_str = product.get_attribute("data-product-info")
-            product_info = json.loads(product_info_str)
-            product_check = db.mvideo.find({'productName': product_info['productName']})
-            print(product_check)
+        product_info_str = product.get_attribute("data-product-info")
+        product_info = json.loads(product_info_str)
+        product_check = db.mvideo.find_one({'productName': product_info['productName']})
+        if product_check:
             break
-            hits_count += 1
-            db.mvideo.insert_one(product_info)
+        hits_count += 1
+        db.mvideo.insert_one(product_info)
 
     next_page = products_section.find_element_by_class_name("sel-hits-button-next")
-    if next_page.get_attribute("class") == 'next-btn sel-hits-button-next disabled':
-        break
     actions = ActionChains(driver)
     actions.move_to_element(next_page).click().perform()
     time.sleep(5)
@@ -45,5 +45,3 @@ while True:
 print(f"Была собрана информация о {hits_count} товарах")
 
 driver.quit()
-
-
