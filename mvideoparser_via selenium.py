@@ -23,7 +23,7 @@ hits_count = 0
 
 time.sleep(5)
 
-for i in range(5):
+for i in range(6):
     products_section = driver.find_element_by_xpath(
         "//body[@class='home']/div[@class='wrapper']/div[@class='page-content']/div[@class='main-holder sel-main-holder']/div[10]/div[1]/div[2]/div[1]/div[1]")
     products = products_section.find_elements_by_xpath(".//a[contains(@class,'sel-product-tile-title')]")
@@ -31,7 +31,7 @@ for i in range(5):
     for product in products:
         product_info_str = product.get_attribute("data-product-info")
         product_info = json.loads(product_info_str)
-        product_check = db.mvideo.find_one({'productName': product_info['productName']})
+        product_check = db.mvideo.find_one({'productId': product_info['productId']})
         if product_check:
             break
         hits_count += 1
