@@ -40,7 +40,7 @@ for i in range(6):
     next_page = products_section.find_element_by_class_name("sel-hits-button-next")
     actions = ActionChains(driver)
     actions.move_to_element(next_page).click().perform()
-    time.sleep(5)
+    time.sleep(3)
 
 print(f"Была собрана информация о {hits_count} товарах")
 
